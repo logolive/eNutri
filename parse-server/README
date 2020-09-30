@@ -1,0 +1,6 @@
+TODO:
+Someone should develop a server to do among other things:
+- Sanitize EVERY input
+- Make uploads of photos easier
+- Manage database resets and changes to the database layout
+- automated password resets via mail

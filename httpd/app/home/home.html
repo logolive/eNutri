@@ -1,0 +1,37 @@
+<div ng-show="showContent">
+    <md-content>
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">eNutri</span>
+                    <span class="md-subhead" id="md-subhead-home" hide-gt-xs>University of Reading </span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_1'][mc.selectedLanguage]}} </p>
+                <h4> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_2'][mc.selectedLanguage]}} </h4>
+                <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_3'][mc.selectedLanguage]}} </p>
+                <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_4'][mc.selectedLanguage]}} </p>
+                <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_5'][mc.selectedLanguage]}} </p>
+                </br>
+                <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                    <md-button class="md-raised md-primary" ng-href="#/login">{{'HOME_VOLUNTEER' | translate}} </md-button>
+                </section>
+            </md-card-content>
+            </br>
+        </md-card>
+    </md-content>
+</div>
+
+<div ng-show="loggedIn">
+    <md-content layout-padding>
+        <md-card>
+            <h3 class="md-title">{{'HOME_WELCOME' | translate}}</h3>
+            <p> {{'HOME_WELCOME_DESCRIPTION' | translate}} </p>
+            <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                <md-button class="md-raised md-primary" ng-href="#/questionnaire"> {{'HOME_FFQ' | translate}} </md-button>
+            </section>
+            <br>
+        </md-card>
+    </md-content>
+</div>

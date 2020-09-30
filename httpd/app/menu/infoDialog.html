@@ -1,0 +1,64 @@
+<md-dialog aria-label="Info Tab">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'INFO_TAB_INFO' | translate}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="assets/svg/ic_clear_white_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px; ">
+            <md-tabs md-dynamic-height md-border-bottom>
+                <!--<md-tab label="{{'HELP_TAB_QUESTIONNAIRE' | translate}}">
+                    <md-content class="md-padding">
+                        <p>{{refConfig.get('messagesList')['HELP_TAB_QUESTIONNAIRE_TEXT'][ctrl.selectedLanguage]}}</p>
+                    </md-content>
+                </md-tab>-->
+                <!--<md-tab label="{{'HELP_TAB_TIMELINE' | translate}}">
+                        <md-content class="md-padding">
+                            <img hide show-gt-xs src="assets/images/timeline_horizontal.png" align="middle">
+                            <img hide-gt-xs src="assets/images/timeline_vertical.png" align="middle">
+                            <p>{{'HELP_TAB_TIMELINE_TEXT' | translate}}</p>
+                        </md-content>
+                </md-tab>-->
+                <md-tab label="{{'INFO_TAB_INFO' | translate}}">
+                    <md-content class="md-padding">
+                        <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_1'][ctrl.selectedLanguage]}} </p>
+                        <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_2'][ctrl.selectedLanguage]}} </p>
+                        <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_3'][ctrl.selectedLanguage]}} </p>
+                        <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_4'][ctrl.selectedLanguage]}} </p>
+                        <p> {{ refConfig.get('messagesList')['HOME_ABOUT_DESCRIPTION_5'][ctrl.selectedLanguage]}} </p>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{'CONSENT_HEADING' | translate}}">
+                   <md-content class="md-padding">
+                    <p>{{ refConfig.get('messagesList')['CONSENT_1'][ctrl.selectedLanguage]}}</p>
+                    <p>{{ refConfig.get('messagesList')['CONSENT_2'][ctrl.selectedLanguage]}}</p>
+                    <p>{{ refConfig.get('messagesList')['CONSENT_3'][ctrl.selectedLanguage]}}</p>
+                    <p>{{ refConfig.get('messagesList')['CONSENT_4'][ctrl.selectedLanguage]}}</p>
+                    <p>{{ refConfig.get('messagesList')['CONSENT_5'][ctrl.selectedLanguage]}}</p>
+                    <p>{{ refConfig.get('messagesList')['CONSENT_6'][ctrl.selectedLanguage]}}</p>
+                   </md-content>
+               </md-tab>
+
+               <!-- <md-tab label="{{'HELP_TAB_TIMELINE' | translate}}">
+                        <md-content class="md-padding">
+                            <img hide show-gt-xs src="assets/images/timeline_horizontal.png" align="middle">
+                            <img hide-gt-xs src="assets/images/timeline_vertical.png" align="middle">
+                            <p>{{'HELP_TAB_TIMELINE_TEXT' | translate}}</p>
+                        </md-content>
+                </md-tab>-->
+                <md-tab label="{{'HELP_TAB_CONTACT' | translate}}">
+                    <md-content class="md-padding">
+                        <p>{{ refConfig.get('messagesList')['HELP_TAB_CONTACT_TEXT'][ctrl.selectedLanguage]}}</p>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="answer('OK')" style="margin-right:20px;" md-autofocus>
+                OK
+            </md-button>
+        </md-dialog-actions>
+</md-dialog>

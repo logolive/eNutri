@@ -1,0 +1,340 @@
+<style>
+    .messyTable tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+    .messyTable tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+    .messyTable th {
+        background-color: #ffffff;
+    }
+</style>
+<div ng-show="showContent" ng-cloak>
+    <md-content>
+        <!-- TOOLBAR -->
+        <md-card>
+            <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                <div class="md-toolbar-tools">
+                    <form flex layout="row" name="masterkey.form">
+                        <input type="password" ng-model="masterKey" placeholder="please insert your Masterkey" />
+                        <input style="width:200px; margin: 10px" type="button" value="Save" ng-click="saveValues()" /><!--
+                        <input style="width:200px; margin: 10px" type="button" value="Reset" ng-click="resetValues();showMessage('All values have been reset',3);" />
+                        <input style="width:200px; margin: 10px" type="button" value="UTIL" ng-click="setFoodPage(1)" />-->
+                    </form>
+                </div>
+            </md-toolbar>
+        </md-card>
+        <!-- MESSAGES -->
+        <md-card ng-repeat="msg in messages" layout="row" style="background-color: rgb(255, 255, 100);">
+            <div class="md-padding">
+                <p>   {{msg.text}}</p>
+            </div>
+        </md-card>
+        <md-card ng-repeat="error in errors" layout="row" style="background-color: rgb(255, 74, 74);">
+            <div class="md-padding">
+                <md-icon ng-click="closeError($index)">close</md-icon>
+                <p>{{error.text}}</p>
+            </div>
+        </md-card>
+
+        <!-- CONFIGS -->
+        <md-card>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <!--Some introductory text-->
+                <md-tab label="Introduction">
+                    <div class="md-padding">
+                        <md-list-item>
+                            <h1>Welcome to the admin panel</h1>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>Here you may change the contents of the FFQ, decide which participants get directly accepted, and change basic things.</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>If you are here for the first time, you may generate a string for the Import-tab <a href="/tools">here</a></p>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>If you need to change a password for someone, you can do this <a href="/tools/password.html">here</a></p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>info</md-icon>
+                            <p>Please note that you can only make changes using your Masterkey.
+                                You should have seen it while setting up the site.
+                            </p>
+                        </md-list-item>
+                    </div>
+                </md-tab>
+                <!--General items-->
+                <md-tab label="General">
+                    <div class="md-padding">
+                       <md-tabs md-dynamic-height md-border-bottom>
+                        <md-tab label="Constants">
+                            <md-table-container>
+                                <table md-table class="messyTable">
+                                    <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                    <tr md-row>
+                                        <th md-column><span>Identifier</span></th>
+                                        <th md-column>
+                                            <span>Value</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                        <tr md-row>
+                                            <td md-cell ><md-icon title="">info</md-icon>FFQ Validity [h]</td>
+                                            <td md-cell><input style="width:100%" type="number" ng-model="constantsList['FfqValidity']" /></td>
+                                        </tr>
+                                        <tr md-row>
+                                            <td md-cell ><md-icon title="">info</md-icon>FFQ Interval [d]</td>
+                                            <td md-cell><input style="width:100%" type="number" ng-model="constantsList['FfqInterval']" /></td>
+                                        </tr>
+                                        <tr md-row>
+                                            <td md-cell ><md-icon title="">info</md-icon>Study Duration [d]</td>
+                                            <td md-cell><input style="width:100%" type="number" ng-model="constantsList['studyDuration']" /></td>
+                                        </tr>
+                                        <tr md-row>
+                                            <td md-cell ><md-icon title="">info</md-icon>Default Height Unit</td>
+                                            <td md-cell ><md-input-container class="md-block">
+                                                <md-select aria-label="Condition" ng-model="constantsList['defaultHeightUnit']">
+                                                    <md-option ng-repeat="option in ['cm']" ng-value="option">{{option}}</md-option>
+                                                </md-select>
+                                            </md-input-container></td>
+                                        </tr>
+                                        <tr md-row>
+                                            <td md-cell ><md-icon title="">info</md-icon>Default Weight Unit</td>
+                                            <td md-cell ><md-input-container class="md-block">
+                                                <md-select aria-label="Condition" ng-model="constantsList['defaultWeightUnit']">
+                                                    <md-option ng-repeat="option in ['kg']" ng-value="option">{{option}}</md-option>
+                                                </md-select>
+                                            </md-input-container></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                        </md-tab>
+                           <md-tab label="Messages">
+                               <md-table-container>
+                                   <table md-table class="messyTable">
+                                       <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                       <tr md-row>
+                                           <th md-column><span>Identifier</span></th>
+                                           <th md-column ng-repeat="(key,data) in messagesList.TEMPLATE" ng-if="['TYPE','DESC'].indexOf(key)==-1">
+                                               <span>{{key}}</span>
+                                           </th>
+                                       </tr>
+                                       </thead>
+                                       <tbody md-body>
+                                       <tr md-row ng-repeat="(messageName,messageObj) in messagesList" ng-if="messageObj.TYPE=='general'">
+                                           <td md-cell >
+                                               <md-icon title="{{messageObj.DESC}}">info</md-icon>
+                                               {{messageName}}
+                                           </td>
+                                           <td md-cell ng-repeat="(lang,message) in messageObj" ng-if="['TYPE','DESC'].indexOf(lang)==-1">
+                                               <input style="width:100%" type="text" ng-model="messagesList[messageName][lang]" />
+                                           </td>
+                                       </tr>
+                                       </tbody>
+                                   </table>
+                               </md-table-container>
+                           </md-tab>
+                       </md-tabs>
+                   </div>
+                </md-tab>
+                <!--The FFQ questions and nutritional values-->
+                <md-tab label="FFQ">
+                    <div class="md-padding">
+                        <md-tabs md-dynamic-height md-border-bottom>
+                            <!--Foods-->
+                            <md-tab label="Foods">
+                                <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                                    <div class="md-toolbar-tools">
+                                        <form flex layout="row">
+                                            <input style="width:200px; margin: 10px" type="button" value="Add Food Item" ng-click="addFood()" />
+                                            <input style="width:200px; margin: 10px" type="button" value="UP" ng-click="setFoodPage(currentFoodPage-1)" ng-disabled="currentFoodPage<1" />
+                                            <input style="width:200px; margin: 10px" type="button" value="DOWN" ng-click="setFoodPage(currentFoodPage+1)" ng-disabled="currentFoodPage>=numFoodPages-1" />
+                                        </form>
+                                    </div>
+                                </md-toolbar>
+                                <md-table-container>
+                                    <table md-table class="messyTable">
+                                        <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                        <tr md-row>
+                                            <th md-column ng-repeat="key in ['','Name','Examples','small Portion [g]','medium Portion [g]','large Portion [g]']">
+                                                <span>{{key}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row ng-repeat="food in foodsPage track by $index" ng-init="foodIndex = $index">
+                                            <td>
+                                                <md-icon ng-click="removeFood(foodIndex)">close</md-icon>
+                                            </td>
+                                            <td md-cell ng-repeat="key in ['foodname','foodexample']">
+                                                <input style="width:100%" type="text" ng-model="foodsPage[foodIndex][key]" />
+                                            </td>
+                                            <td md-cell ng-repeat="key in ['pSmall','pMedium','pLarge']">
+                                                <div layout="row">
+                                                    <input type="number" ng-model="foodsPage[foodIndex][key]" />
+                                                    <input style="width:150px" type="file" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                            </md-tab>
+                            <!--Nutrients-->
+                            <md-tab label="Nutrients">
+                                <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                                    <div class="md-toolbar-tools">
+                                        <form flex layout="row">
+                                            <input type="text" ng-model="newNutrientName" placeholder="Add a name for a new nutrient" />
+                                            <input style="width:200px; margin: 10px" type="button" value="Add" ng-click="addNutrient(newNutrientName)" />
+                                            <input style="width:200px; margin: 10px" type="button" value="UP" ng-click="setFoodPage(currentFoodPage-1)" ng-disabled="currentFoodPage<1" />
+                                            <input style="width:200px; margin: 10px" type="button" value="DOWN" ng-click="setFoodPage(currentFoodPage+1)" ng-disabled="currentFoodPage>=numFoodPages-1" />
+                                            <input style="width:200px; margin: 10px" type="button" value="&lt" ng-click="setNutrientPage(nutrientKeyPage-1)" ng-disabled="nutrientKeyPage<1" />
+                                            <input style="width:200px; margin: 10px" type="button" value="&gt" ng-click="setNutrientPage(nutrientKeyPage+1)" ng-disabled="nutrientKeyPage>=numNutrientPages-1" />
+                                        </form>
+                                    </div>
+                                </md-toolbar>
+                                <md-table-container>
+                                    <table md-table class="messyTable">
+                                        <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                        <tr md-row>
+                                            <th md-column>
+                                                <span>Food</span>
+                                            </th>
+                                            <th md-column ng-repeat="key in nutrientKeys">
+                                                <md-icon ng-click="removeNutrient(key)">close</md-icon>
+                                                <span>{{key}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row ng-repeat="food in foodsPage" ng-init="foodIndex = $index">
+                                            <td md-cell>{{food.foodname}}</td>
+                                            <td md-cell ng-repeat="key in nutrientKeys">
+                                                <input style="width:100%" type="number" ng-model="nutrientsPage[foodIndex][key]" />
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                            </md-tab>
+                        </md-tabs>
+                    </div>
+                </md-tab>
+                <!--Report messages-->
+                <md-tab label="Reports">
+                     <div class="md-padding">
+                        <md-tabs md-dynamic-height md-border-bottom>
+                            <md-tab ng-repeat="group in ['web','control']" label="{{group}}">
+                                <md-table-container>
+                                    <table md-table class="messyTable">
+                                        <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                        <tr md-row>
+                                            <th md-column><span>Identifier</span></th>
+                                            <th md-column ng-repeat="(key,data) in messagesList.TEMPLATE" ng-if="['TYPE','DESC'].indexOf(key)==-1">
+                                                <span>{{key}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row ng-repeat="(messageName,messageObj) in messagesList" ng-if="messageObj.TYPE==group">
+                                            <td md-cell >
+                                                <md-icon title="{{messageObj.DESC}}">info</md-icon>
+                                                {{messageName}}
+                                            </td>
+                                            <td md-cell ng-repeat="(lang,message) in messageObj" ng-if="['TYPE','DESC'].indexOf(lang)==-1">
+                                                <input style="width:100%" type="text" ng-model="messagesList[messageName][lang]" />
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                            </md-tab>
+                        </md-tabs>
+                    </div>
+                </md-tab>
+                <!--How users get admissed-->
+                <md-tab label="User Selection">
+                    <div class=md-padding>
+                        <p>The rules are traversed top to bottom and
+                            the first matching rule determines whether the user is rejected,
+                            accepted or must be accepted explicitly</p>
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <form flex layout="row">
+                                    <input style="width:200px; margin: 10px" type="button" value="Add Rule" ng-click="addRule()" />
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table class="messyTable">
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column ng-repeat="key in ['','Condition','Selectors','Decision']">
+                                        <span>{{key}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="rule in userEligibilityList" ng-init="ruleIndex = $index">
+                                    <td>
+                                        <md-icon ng-click="removeRule(ruleIndex)">close</md-icon>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container class="md-block">
+                                            <md-select aria-label="Condition" ng-model="userEligibilityList[ruleIndex].type" ng-change="changeRuleCondition(ruleIndex)">
+                                                <md-option ng-repeat="option in ['unconditional','and','or']" ng-value="option">{{option}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container class="md-block" ng-repeat="selector in userEligibilityList[ruleIndex].arguments track by $index" ng-init="selectorIndex=$index">
+                                            <div layout="row">
+                                                <md-icon ng-click="removeRuleArgument(ruleIndex,selectorIndex)" ng-if="userEligibilityList[ruleIndex].arguments.length>1">close</md-icon>
+                                                <md-select aria-label="Selectors" ng-model="userEligibilityList[ruleIndex].arguments[selectorIndex]">
+                                                    <md-option ng-repeat="option in selectors" ng-value="option">{{option}}</md-option>
+                                                </md-select>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" ng-if="rule.type!='unconditional'">
+                                            <div layout="row">
+                                                <md-icon ng-click="addRuleArgument(ruleIndex)">add</md-icon>
+                                            </div>
+                                        </md-input-container>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container class="md-block">
+                                            <md-select aria-label="Decision" ng-model="userEligibilityList[ruleIndex].decision">
+                                                <md-option ng-repeat="option in ['accept','wait','reject']" ng-value="option">{{option}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        
+                    </div>
+                </md-tab>
+                <!--Save Settings to disk-->
+                <md-tab label="Import/Export">
+                    <div class="md-padding">
+                        <p>Here you can import settings or export them for later use.
+                            Just copy the code from or into this field.
+                        </p>
+                        <form flex>
+                            <textarea ng-model="exportText" style="width:100%; height: 300px"></textarea>
+                            <div layout="row">
+                                <input style="margin: 10px" type="button" value="Export Settings" ng-click="exportValues()" />
+                                <input style="margin: 10px" type="button" value="Import Settings" ng-click="importValues()" />
+                            </div>
+                        </form>
+    
+                    </div>
+                </md-tab>
+            </md-tabs>
+        </md-card>
+    </md-content>
+</div>

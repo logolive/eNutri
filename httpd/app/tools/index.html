@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+
+        <script type="text/javascript" src="tools.js"></script>
+
+    </head>
+    <body>
+
+
+        <h1>Importstring Edit Tools</h1>
+        <p>Just paste your current String below, adust the settings and hit edit.<br \>
+        This is not the site to save anything!</p>
+
+        <p>Choose what you want to overwrite.
+            Anything else will be preserved from your input.<br \>
+            If you select "Overwrite Foods and Nutrients", you may upload an XLSX document to extract the values from.
+        </p>
+
+        <form>
+
+            <input type="checkbox" id="overwriteM" value="Overwrite Messages" />
+            <label for="overwriteM">Overwrite Messages</label><br>
+            <input type="checkbox" id="overwriteC" value="Overwrite General Values" />
+            <label for="overwriteM">Overwrite General Values</label><br>
+            <input type="checkbox" id="overwriteU" value="Overwrite User Selection List" />
+            <label for="overwriteM">Overwrite User Selection List</label><br>
+            <input type="checkbox" id="overwriteF" value="Overwrite Foods and Nutrients" />
+            <label for="overwriteM">Overwrite Foods and Nutrients</label><br>
+            <input type="file" id="fileUpload" />
+        </form>
+        <hr />
+        <textarea id="exportText" style="width:100%; height: 300px"></textarea>        
+        <hr />
+        <input type="button" id="edit" value="Edit" onclick="Process()" />
+    </body>
+</html>

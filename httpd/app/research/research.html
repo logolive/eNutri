@@ -1,0 +1,428 @@
+<div ng-show="loggedIn" ng-cloak>
+    <md-content>
+        <md-card>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Summary">
+                    <div class="md-padding">
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants registered: {{users.length}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants with complete screening: {{countUsersCompletedScreening}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants with accepted screening: {{countUsersAcceptedScreening}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants waiting for eligibility confirmation: {{countUsersWaitingEligibility}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants with 1 complete FFQs: {{countUsersOneCompletedFFQ}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants with 2 complete FFQs: {{countUsersTwoCompletedFFQ}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Participants with 3 complete FFQs: {{countUsersThreeCompletedFFQ}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Complete SUS Surveys: {{surveyList.length}}</p>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon>cached</md-icon>
+                            <p>Complete Report Feedbacks: {{feedbackList.length}}</p>
+                        </md-list-item>
+                    </div>
+                </md-tab>
+                <md-tab label="Progress">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column md-order-by="name"><span>userID</span></th>
+                                    <th md-column md-order-by="username" md-desc><span>e-mail</span></th>
+                                    <th md-column><span>Group</span></th>
+                                    <th md-column><span>Consent</span></th>
+                                    <th md-column><span>Screening</span></th>
+                                    <th md-column><span>Accepted</span></th>
+                                    <th md-column><span>Survey</span></th>
+                                    <th md-column><span>#Complete FFQs</span></th>
+                                    <th md-column><span>First Complete FFQ Date</span></th>
+                                    <th md-column><span>Last Complete FFQ Date</span></th>
+                                    <th md-column><span>Due FFQ</span></th>
+                                    <th md-column><span>Report Feedback</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="user in users | filter:search">
+                                    <td md-cell>{{ user.get("objectId") }}</td>
+                                    <td md-cell>{{ user.get("username") }}</td>
+                                    <td md-cell>{{ user.get("group") }}</td>
+                                    <td md-cell>{{ user.get("state").get("consentResponse")}}</td>
+                                    <td md-cell>{{ user.get("state").get("screeningComplete")}}</td>
+                                    <td md-cell>{{ user.get("state").get("screeningAccepted")}}</td>
+                                    <td md-cell>{{ user.get("state").get("surveyComplete")}}</td>
+                                    <td md-cell>{{ user.get("state").get("FFQCompleteCount")}}</td>
+                                    <td md-cell>{{ user.get("state").get("firstFFQCompletionDate")}}</td>
+                                    <td md-cell>{{ user.get("state").get("lastFFQCompletionDate")}}</td>
+                                    <td md-cell>{{ user.get("state").get("nextFFQDueDate")}}</td>
+                                    <td md-cell>{{ user.get("state").get("feedbackComplete")}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Screening">
+                    <div class="md-padding">
+                            <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                                <div class="md-toolbar-tools">
+                                    <md-icon>search</md-icon>
+                                    <form flex name="filter.form">
+                                        <input type="text" ng-model="search.$" placeholder="search users">
+                                    </form>
+                                </div>
+                            </md-toolbar>
+                            <md-table-container>
+                                <table md-table>
+                                    <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                    <tr md-row>
+                                        <th md-column><span>userID</span></th>
+                                        <th md-column><span>e-mail</span></th>
+                                        <th md-column><span>Group</span></th>
+                                        <th md-column><span>First Name</span></th>
+                                        <th md-column><span>Surname</span></th>
+                                        <th md-column><span>Gender</span></th>
+                                        <th md-column><span>Age</span></th>
+                                        <th md-column><span>Height (cm)</span></th>
+                                        <th md-column><span>Education</span></th>
+                                        <th md-column><span>Not Good Health</span></th>
+                                        <th md-column><span>Not Good Health Desc</span></th>
+                                        <th md-column><span>Lactose</span></th>
+                                        <th md-column><span>Food Allergy</span></th>
+                                        <th md-column><span>Food Allergy Description</span></th>
+                                        <th md-column><span>Diabetes</span></th>
+                                        <th md-column><span>Methabolic Disorder</span></th>
+                                        <th md-column><span>Illnesses</span></th>
+                                        <th md-column><span>Illnesses Desc</span></th>
+                                        <th md-column><span>Medication</span></th>
+                                        <th md-column><span>Medication Desc</span></th>
+                                        <th md-column><span>Medical Info</span></th>
+                                        <th md-column><span>Medical Info Desc</span></th>
+                                        <th md-column><span>Not living in the UK</span></th>
+                                        <th md-column><span>Vegan</span></th>
+                                        <th md-column><span>Diet Req</span></th>
+                                        <th md-column><span>Diet Req Desc</span></th>
+                                        <th md-column><span>Accept</span></th>
+                                        <th md-column><span>Reject</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row ng-repeat="user in users | filter:search">
+                                        <td md-cell>{{ user.get("objectId") }}</td>
+                                        <td md-cell>{{ user.get("username") }}</td>
+                                        <td md-cell>{{ user.get("group") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("firstname")}}</td>
+                                        <td md-cell>{{ user.get("screening").get("surname") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("gender") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("age") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("height") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("education") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("notgoodhealth") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("notgoodhealthDesc")}}</td>
+                                        <td md-cell>{{ user.get("screening").get("lactose") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("foodallergy") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("foodallergyDesc") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("diabetes") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("methabolicdisorder") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("illness") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("illnessDesc") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("medication") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("medicationDesc") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("medicalinformation") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("medicalinformationDesc") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("livinguk") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("vegan") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("dietaryreq") }}</td>
+                                        <td md-cell>{{ user.get("screening").get("dietaryreqDesc") }}</td>
+                                        <td md-cell ng-show="user.get('group') == 'waiting'"><md-button  md-no-ink class="md-primary" ng-click="redefineParticipantGroup(user)"> Accept </md-button></td>
+                                        <td md-cell ng-show="user.get('group') == 'waiting'"><md-button  md-no-ink class="md-primary" ng-click="rejectParticipant(user)"> Reject </md-button></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Recruitment">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column><span>userID</span></th>
+                                    <th md-column><span>e-mail</span></th>
+                                    <th md-column><span>Group</span></th>
+                                    <th md-column><span>Self-reported</span></th>
+                                    <th md-column><span>Source</span></th>
+                                    <th md-column><span>Medium</span></th>
+                                    <th md-column><span>Campaign</span></th>
+                                    <th md-column><span>Term</span></th>
+                                    <th md-column><span>Content</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="user in users | filter:search">
+                                    <td md-cell>{{ user.get("objectId") }}</td>
+                                    <td md-cell>{{ user.get("username") }}</td>
+                                    <td md-cell>{{ user.get("group") }}</td>
+                                    <td md-cell>{{ user.get("screening").get("recruitment") }}</td>
+                                    <td md-cell>{{ user.get("utm").get("source") }}</td>
+                                    <td md-cell>{{ user.get("utm").get("medium") }}</td>
+                                    <td md-cell>{{ user.get("utm").get("campaign") }}</td>
+                                    <td md-cell>{{ user.get("utm").get("term") }}</td>
+                                    <td md-cell>{{ user.get("utm").get("content") }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Baecke">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column><span>userID</span></th>
+                                    <th md-column><span>Date</span></th>
+                                    <th md-column><span>FFQ ID</span></th>
+                                    <th md-column><span>Weight</span></th>
+                                    <th md-column><span>Baecke</span></th>
+                                    <th md-column><span>Leisure</span></th>
+                                    <th md-column><span>Sports</span></th>
+                                    <th md-column><span>Work</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[1].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[1].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[1].get('ffqId') }}</td>
+                                    <td md-cell>{{ report[1].get('currentWeight') | number:1}}</td>
+                                    <td md-cell>{{ report[1].get('baecke').get('overall')/15*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[1].get('baecke').get('leisure')/5*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[1].get('baecke').get('sports')/5*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[1].get('baecke').get('work')/5*100 | number:0}}%</td>
+                                </tr>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[2].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[2].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[2].get('ffqId') }}</td>
+                                    <td md-cell>{{ report[2].get('currentWeight') }}</td>
+                                    <td md-cell>{{ report[2].get('baecke').get('overall')/15*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[2].get('baecke').get('leisure')/5*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[2].get('baecke').get('sports')/5*100 | number:0 }}%</td>
+                                    <td md-cell>{{ report[2].get('baecke').get('work')/5*100 | number:0}}%</td>
+                                </tr>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[3].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[3].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[3].get('ffqId') }}</td>
+                                    <td md-cell>{{ report[3].get('currentWeight') }}</td>
+                                    <td md-cell>{{ report[3].get('baecke').get('overall')/15*100 | number:0}}%</td>
+                                    <td md-cell>{{ report[3].get('baecke').get('leisure')/5*100 | number:0}}%</td>
+                                    <td md-cell>{{ report[3].get('baecke').get('sports')/5*100 | number:0}}%</td>
+                                    <td md-cell>{{ report[3].get('baecke').get('work')/5*100 | number:0}}%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Nutrients">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column><span>userID</span></th>
+                                    <th md-column><span>Date</span></th>
+                                    <th md-column><span>FFQ ID</span></th>
+                                    <th md-column ng-repeat="nutrient in nutrientsList"><span>{{nutrient}}</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[1].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[1].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[1].get('ffqId') }}</td>
+                                    <td md-cell ng-repeat="nutrient in nutrientsList">{{report[1].get('nutrients').get('results')[nutrient]| number:3}}</td>
+                                </tr>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[2].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[2].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[2].get('ffqId') }}</td>
+                                    <td md-cell ng-repeat="nutrient in nutrientsList">{{report[2].get('nutrients').get('results')[nutrient]| number:3}}</td>
+                                </tr>
+                                <tr md-row ng-repeat="report in reportsList | filter:search" ng-if="report[3].get('ffqId')>=0">
+                                    <td md-cell>{{ report[0] }}</td>
+                                    <td md-cell>{{ report[3].get('reportDate') }}</td>
+                                    <td md-cell>{{ report[3].get('ffqId') }}</td>
+                                    <td md-cell ng-repeat="nutrient in nutrientsList">{{report[3].get('nutrients').get('results')[nutrient]| number:3}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Export">
+                    <div class="md-padding">
+                        <md-button class="md-raised md-primary" ng-click="exportFFQResults()"> Export FFQ results </md-button>
+                        <md-button class="md-raised md-primary" ng-click="exportFFQInfo()"> Export FFQ info </md-button>
+                    </div>
+                </md-tab>
+                <md-tab label="Survey">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column><span>userID</span></th>
+                                    <th md-column><span>SUS</span></th>
+                                    <th md-column><span>Overall</span></th>
+                                    <th md-column><span>Difficulties?</span></th>
+                                    <th md-column><span>Q1</span></th>
+                                    <th md-column><span>Q2</span></th>
+                                    <th md-column><span>Q3</span></th>
+                                    <th md-column><span>Q4</span></th>
+                                    <th md-column><span>Q5</span></th>
+                                    <th md-column><span>Q6</span></th>
+                                    <th md-column><span>Q7</span></th>
+                                    <th md-column><span>Q8</span></th>
+                                    <th md-column><span>Q9</span></th>
+                                    <th md-column><span>Q10</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="survey in surveyList | filter:search">
+                                    <td md-cell>{{ survey[0] }}</td>
+                                    <td md-cell>{{ survey[1].get('surveySUS')}}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[11] }}</td>
+                                    <td md-cell>{{ survey[1].get('problems') }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[1] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[2] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[3] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[4] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[5] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[6] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[7] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[8] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[9] }}</td>
+                                    <td md-cell>{{ survey[1].get('answers')[10] }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+                <md-tab label="Feedback">
+                    <div class="md-padding">
+                        <md-toolbar class="md-table-toolbar md-default" ng-show=true>
+                            <div class="md-toolbar-tools">
+                                <md-icon>search</md-icon>
+                                <form flex name="filter.form">
+                                    <input type="text" ng-model="search.$" placeholder="search users">
+                                </form>
+                            </div>
+                        </md-toolbar>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                                <tr md-row>
+                                    <th md-column><span>userID</span></th>
+                                    <th md-column><span>Date</span></th>
+                                    <th md-column><span>Difficulties</span></th>
+                                    <th md-column><span>Help</span></th>
+                                    <th md-column><span>Comments</span></th>
+                                    <th md-column><span>Q1</span></th>
+                                    <th md-column><span>Q2</span></th>
+                                    <th md-column><span>Q3</span></th>
+                                    <th md-column><span>Q4</span></th>
+                                    <th md-column><span>Q5</span></th>
+                                    <th md-column><span>Q6</span></th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row ng-repeat="feedback in feedbackList | filter:search">
+                                    <td md-cell>{{ feedback[0] }}</td>
+                                    <td md-cell>{{ feedback[1].get('reportDate') }}</td>
+                                    <td md-cell>{{ feedback[1].get('user61') }}</td>
+                                    <td md-cell>{{ feedback[1].get('user71') }}</td>
+                                    <td md-cell>{{ feedback[1].get('user81') }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[1] }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[2] }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[3] }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[4] }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[5] }}</td>
+                                    <td md-cell>{{ feedback[1].get('answers')[6] }}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-tab>
+            </md-tabs>
+        </md-card>
+    </md-content>
+</div>

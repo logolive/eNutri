@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+
+    <title> eNutri </title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet" href="assets/stylesheets/md-data-table.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css"/>
+    <link rel="stylesheet" href="assets/stylesheets/menu.css"/>
+
+    <!-- Hide everything until Angular is loaded -->
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+
+    <script src="https://npmcdn.com/parse/dist/parse.js"></script>
+
+    <script src="./node_modules/angular/angular.js"></script>
+    <script src="./node_modules/angular-animate/angular-animate.js"></script>
+    <script src="./node_modules/angular-aria/angular-aria.js"></script>
+    <script src="./node_modules/angular-translate/dist/angular-translate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
+
+    <!-- Angular NVD3 library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
+    <script src="https://rawgit.com/krispo/angular-nvd3/v1.0.4/dist/angular-nvd3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-nvd3-directives/0.0.8/angularjs-nvd3-directives.js"></script>
+
+    <!-- AddEvent -->
+    <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
+
+</head>
+
+<body ng-app="eNutri" layout="row" ng-controller="MenuController as mc" ng-cloak>
+
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+                md-component-id="left"
+                ng-click="mc.toggleMenu()" aria-label="Show Menu List"
+                md-is-locked-open="$mdMedia('gt-sm')">
+
+        <md-toolbar class="md-whiteframe-z1">
+            <h3>eNutri</h3>
+        </md-toolbar>
+
+        <md-list>
+            <md-list-item ng-repeat="it in mc.menus">
+                <md-button ng-click="mc.selectMenu(it)" ng-class="{'selected' : it === mc.selected }" ng-href="#/{{it.url}}">
+                    <md-icon md-svg-icon="{{it.icon}}" class="avatar"></md-icon>
+                    {{it.name}}
+                </md-button>
+            </md-list-item>
+        </md-list>
+
+    </md-sidenav>
+
+    <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
+
+        <md-toolbar layout="row" class="md-whiteframe-z1">
+            <md-button id="main" class="menu" hide-gt-sm ng-click="mc.toggleMenu()" aria-label="Show User List">
+                <md-icon md-svg-icon="menu" ></md-icon>
+            </md-button>
+            <h3></h3>
+
+            <md-button ng-click="mc.showHelp($event)" class="md-fab md-mini md-primary" aria-label="help" ng-show="loggedIn">
+                <md-icon md-svg-icon="assets/svg/ic_help_outline_white_24px.svg"></md-icon>
+                <md-tooltip md-direction="bottom">Help</md-tooltip>
+            </md-button>
+            <md-button ng-click="mc.showInfo($event,mc.selectedLanguage)" class="md-fab md-mini md-primary" aria-label="info" ng-hide="loggedIn">
+                <md-icon md-svg-icon="assets/svg/ic_info_outline_white_24px.svg"></md-icon>
+                <md-tooltip md-direction="bottom">Information</md-tooltip>
+            </md-button>
+        </md-toolbar>
+
+        <md-content flex id="content">
+
+            <div ng-view></div>
+
+        </md-content>
+
+    </div>
+
+    <!-- These are our custom scripts -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+
+    <script src="backend.utils/backend.utils.js"></script>
+
+
+    <script src="home/home.js"></script>
+    <script src="login/login.js"></script>
+    <script src="account/account.js"></script>
+    <script src="ffq/ffq.js"></script>
+    <script src="reports/reports.js"></script>
+    <script src="research/research.js"></script>
+    <script src="admin/admin.js"></script>
+
+    <script src="menu/Menu.js"></script>
+    <script src="menu/MenuController.js"></script>
+    <script src="assets/stylesheets/md-data-table.js" type="text/javascript"></script>
+
+</body>
+</html>
